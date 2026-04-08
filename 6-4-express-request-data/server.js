@@ -121,13 +121,13 @@ app.get("/echo", (req, res)=>{
    const{ name, age} =req.query;
 
    if (!name || !age){
-      return res.status(400).json({ok: false, error:"Name and Age reauired"})
+      return res.status(400).json({ok: false, error:"Name and Age required"})
    }
    res.json({
       ok: true,
       name,
       age,
-   msg:`Hello ${name}, you are ${age} years old `})
+   msg:`Hello ${name}, you are ${age} `})
 })
 
 
@@ -136,8 +136,6 @@ app.get("/profile/:first/:last", (req,res)=>{
    const{ first, last}= req.params;
    res.json({
       ok: true,
-      first,
-      last,
       fullName:`${first} ${last}`
    })
 })
@@ -145,17 +143,19 @@ app.get("/profile/:first/:last", (req,res)=>{
 
 // Route param middleware example: /users/42
 
-app.param("userId",(req,res,next,userID)=>{
-   const n = Number(userId);
-   if (!Number.isFinite(n) || n < 1) {
-    return res.status(400).json({ ok: false, error: "userId must be a positive number" });
+app.param("userId", (req, res, next, userId) => {
+  const n = Number(userId);
+
+  if (!Number.isFinite(n) || n < 1) {
+    return res.status(400).json({ ok: false, error: "userId must be positive number" });
   }
-  req.userID=n;
+
+  req.userIdNum = n;
   next();
 });
 
-app.get("/userss/:userId", (req, res) => {
-  res.json({ ok: true, userId: req.n });
+app.get("/users/:userId", (req, res) => {
+  res.json({ ok: true, userId: req.userIdNum });
 });
 
 
